@@ -12,6 +12,10 @@ class Post
   property :title,	String
 
   has n, :comments
+
+  def commentids
+    "#{comments.collect{ |c| c.id }}"
+  end
 end
 
 class Comment
@@ -34,17 +38,19 @@ Post.create(:title => 'First Post')
 
 p1.comments.create(:author => 'John')
 Post.get(2).comments.create(:author => 'Harold')
+p1.comments.create(:author => 'Shaw')
+p1.comments.create(:author => 'Root')
 
 get "/" do
   "Hello world"
 end
 
 get "/posts" do
-  Post.all.to_json
+  Post.all.to_json(:methods => [:commentids])
 end
 
 get "/post/:id" do
-  Post.get(params['id']).to_json
+  Post.get(params['id']).to_json(:methods => [:commentids])
 end
 
 get "/comments" do
