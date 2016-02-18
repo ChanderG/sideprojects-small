@@ -12,13 +12,37 @@ func removeApostophe(s string) string {
   return strings.Split(s, "'")[0]
 }
 
+func blankLetter(r rune) rune {
+  vowels := [5]rune{'a', 'e', 'i', 'o', 'u'}
+  isVowel := false
+  for i:=0; i< len(vowels);i++ {
+	if r == vowels[i] {
+	  isVowel = true
+	}
+  }
+  if isVowel == false {
+    return '_'
+  } else {
+	return r
+  }
+}
+
+func blankifyWord(s string) string {
+  blankedWord := strings.Map(blankLetter, s)
+  return blankedWord
+}
+
 func main(){
   fmt.Println("Welcome to hangman game.")
 
   fmt.Println("Choosing random word...")
   word := chooseWord()
   fmt.Println("word is", word)
+
+  word = blankifyWord(word)
+  fmt.Println(word)
 }
+
 func chooseWord() string {
   var filename string = "words"
 
