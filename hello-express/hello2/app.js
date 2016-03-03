@@ -23,9 +23,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Setup authentication
+var auth = require('http-auth');
+var secret_auth = auth.basic({
+  realm: "Secret Area",
+  file: "./users.passwdfile"
+});
+
 app.use('/', routes);
 app.use('/users', users);
-app.use('/secret', secret)
+app.use('/secret', auth.connect(secret_auth), secret); // use auth for this route alone
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
